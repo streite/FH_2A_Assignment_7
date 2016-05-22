@@ -1,18 +1,19 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 //--------------------------- Class Prototype ----------------------------------
 class TripleString
 {
-
 private:
 
    string string1,string2,string3;
 
    // Method
-   bool validString(string str);
+   static bool validString(string str);
 
 public:
 
@@ -36,6 +37,9 @@ public:
    bool setString1(string initString);
    bool setString2(string initString);
    bool setString3(string initString);
+
+   // Concatenate Three Private Member Strings
+   string toString(TripleString triple);
 };
 
 // Static Constants Initialization
@@ -43,76 +47,93 @@ const int TripleString::MAX_LEN = 50;
 const int TripleString::MIN_LEN = 1;
 const string TripleString::DEFAULT_STRING = " (undefined) ";
 
-// Concatenate Three Private Member Strings
-string toString(TripleString triple);
+//
+const int MIN_BET = 0;
+const int MAX_BET = 50;
+const int PROB_CHERRY = 40;
+const int PROB_BAR = 38;
+const int PROB_SEVEN = 15;
+const int PROB_SPACE = 7;
+
+//
+int getBet();
+
+//
+TripleString pull();
+
+//
+string randString();
 
 //----------------------------- Main Method ------------------------------------
 int main()
 {
 
-   string String123;
+   /* initialize random seed: */
+   srand (time(NULL));
 
-   // Instantiate Four Object
-   TripleString TripleObj1;
-   TripleString TripleObj2("A","B","C");
-   TripleString TripleObj3;
-   TripleString TripleObj4("Dad","Mom","Sister");
+   //getBet();
 
-   // Display All Objects
-   String123 = toString(TripleObj1);
-   cout << "All strings in TripleString Object 1: " << String123 << endl;
-   String123 = toString(TripleObj2);
-   cout << "All strings in TripleString Object 2: " << String123 << endl;
-   String123 = toString(TripleObj3);
-   cout << "All strings in TripleString Object 3: " << String123 << endl;
-   String123 = toString(TripleObj4);
-   cout << "All strings in TripleString Object 4: " << String123 << endl;
-   cout << endl;
-
-   // Mutate Objects
-   TripleObj1.setString1("mashed");
-   TripleObj2.setString3("potato");
-   TripleObj3.setString2("chicken");
-   TripleObj4.setString1("fried");
-
-   // Display All Objects
-   String123 = toString(TripleObj1);
-   cout << "All strings in TripleString Object 1: " << String123 << endl;
-   String123 = toString(TripleObj2);
-   cout << "All strings in TripleString Object 2: " << String123 << endl;
-   String123 = toString(TripleObj3);
-   cout << "All strings in TripleString Object 3: " << String123 << endl;
-   String123 = toString(TripleObj4);
-   cout << "All strings in TripleString Object 4: " << String123 << endl;
-   cout << endl;
-
-
-   // Test Mutator
-   if (TripleObj1.setString1(""))
-   {
-      cout << "Mutation of member string1 of TripleObj1 succesful" << endl;
-   }
-   else
-   {
-      cout << "Mutation of member string1 of TripleObj1 failed" << endl;
-   }
-
-   if (TripleObj1.setString1("Lego"))
-   {
-      cout << "Mutation of member string1 of TripleObj1 succesful" << endl;
-   }
-   else
-   {
-      cout << "Mutation of member string1 of TripleObj1 failed" << endl << endl;
-   }
-
-   // Accessor Calls
-   String123 = TripleObj1.getString1();
-   cout << "\nString1 of TripleString Object 1: " << String123 << endl;
-   String123 = TripleObj4.getString2();
-   cout << "String2 of TripleString Object 4: " << String123 << endl;
+   randString();
+   randString();
+   randString();
+   randString();
+   randString();
+   randString();
+   randString();
+   randString();
+   randString();
 
    return 0;
+}
+
+//
+int getBet()
+{
+   string betString;
+   int betInt;
+
+   do
+   {
+      cout << "How much would you like to bet (1 - 50) or 0 to quit? ";
+      getline(cin,betString);
+      istringstream(betString) >> betInt;
+   }
+   while ((betInt < MIN_BET) || (betInt > MAX_BET));
+
+   return (betInt);
+}
+
+//
+TripleString pull()
+{
+   TripleString pullTripleString;
+
+   return (pullTripleString);
+}
+
+// 1 -  7: SPACE   (7%)
+// 8 - 22: 7      (15%)
+//23 - 60: BAR    (35%)
+//61 -100: CHERRY (40%)
+string randString()
+{
+   int randomNumber;
+   string randomString;
+
+   randomNumber = (rand() % 100) + 1;
+
+   if (randomNumber > (100 - PROB_CHERRY))
+      randomString = "CHERRY";
+   else if (randomNumber > (100 - PROB_CHERRY - PROB_BAR))
+      randomString = "BAR";
+   else if (randomNumber > (100 - PROB_CHERRY - PROB_BAR - PROB_SEVEN))
+      randomString = "7";
+   else if (randomNumber > (100 - PROB_CHERRY - PROB_BAR - PROB_SEVEN - PROB_SPACE))
+      randomString = "SPACE";
+
+   cout << randomNumber << " - " << randomString << endl;
+
+   return randomString;
 }
 
 //---------------- TripleString Member Functions Defintions  -------------------
@@ -192,12 +213,33 @@ bool TripleString::validString(string str)
 }
 
 // Concatenate All 3 String Members
-string toString(TripleString triple)
+string TripleString::toString(TripleString triple)
 {
    string concatStr;
 
-   concatStr = triple.getString1() + "-" + triple.getString2() + "-"
-      + triple.getString3();
+   concatStr = string1 + string2 + string3;
 
    return concatStr;
 }
+
+/*
+// ***  I got a pull of all BARS in pull 37 and all cherries in pull 15 ***
+
+How much would you like to bet (1 - 50) or 0 to quit? 2
+whirrrrrr .... and your pull is ...
+ BAR  cherries  BAR
+sorry, you lose.
+
+How much would you like to bet (1 - 50) or 0 to quit? 2
+whirrrrrr .... and your pull is ...
+ cherries  BAR  cherries
+congratulations, you win: 10
+
+
+How much would you like to bet (1 - 50) or 0 to quit? -1
+How much would you like to bet (1 - 50) or 0 to quit? 1000
+How much would you like to bet (1 - 50) or 0 to quit? 3
+whirrrrrr .... and your pull is ...
+ BAR  (space)  7
+sorry, you lose.
+*/
